@@ -93,6 +93,23 @@ class LinkedList
     end
     output
   end
+
+  def insert_at(value, index)
+    # base case, index is 0, replace head
+    if index.zero?
+      temp = @head
+      @head = Node.new(value, temp)
+    elsif at(index).value.negative?
+      puts 'The index is out of bounds'
+    else
+      new_node = Node.new(value, at(index))
+      before = at(index - 1)
+      before.next_node = new_node
+      new_node
+    end
+  end
+
+  def remove_at(value, index); end
 end
 
 # demo code
@@ -137,3 +154,13 @@ puts '7i. should print index 7 for value 7 node'
 puts list.find(7)
 puts '7ii. should print nil for 11 node that doesnt exist'
 p list.find(11)
+
+# try the insert_at method
+puts '8i. should print -1 for index 0'
+list.insert_at(-1, 0)
+puts list.head.value
+puts '8ii. should print 11 for index 12'
+list.insert_at(12, 11)
+puts list.tail.value
+puts '8iii. should print error message for index 13'
+list.insert_at(13, 13)
