@@ -101,6 +101,10 @@ class LinkedList
       @head = Node.new(value, temp)
     elsif at(index).value.negative?
       puts 'The index is out of bounds'
+    elsif at(index) == @tail
+      temp = @tail
+      @tail = Node.new(value, nil)
+      temp.next_node = @tail
     else
       new_node = Node.new(value, at(index))
       before = at(index - 1)
@@ -109,7 +113,18 @@ class LinkedList
     end
   end
 
-  def remove_at(value, index); end
+  def remove_at(index)
+    if index.zero?
+      @head = @head.next_node
+    elsif at(index).value.negative?
+      puts 'The index is out of bounds'
+    elsif at(index) == @tail
+      @tail = at(index - 1)
+      @tail.next_node = nil
+    else
+      at(index - 1).next_node = at(index + 1)
+    end
+  end
 end
 
 # demo code
@@ -159,8 +174,16 @@ p list.find(11)
 puts '8i. should print -1 for index 0'
 list.insert_at(-1, 0)
 puts list.head.value
-puts '8ii. should print 11 for index 12'
-list.insert_at(12, 11)
+puts '8ii. should print 10 for index 10'
+list.insert_at(10, 10)
 puts list.tail.value
 puts '8iii. should print error message for index 13'
 list.insert_at(13, 13)
+
+# try the remove_at(index) method
+puts '9i. should print 0 for index 0'
+list.remove_at(0)
+puts list.head.value
+puts '9ii. should print 9 for index 9'
+list.remove_at(10)
+puts list.at(9).value
