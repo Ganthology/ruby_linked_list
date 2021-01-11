@@ -10,18 +10,18 @@ class LinkedList
 
   def append(value)
     if @tail.nil?
-      @tail = Node.new(value)
+      @tail = Node.new(value, nil)
       @head = @tail
     else
       old_tail = @tail
-      @tail = Node.new(value)
+      @tail = Node.new(value, nil)
       old_tail.next_node = @tail
     end
   end
 
   def prepend(value)
     if @head.nil?
-      @head = Node.new(value)
+      @head = Node.new(value, nil)
       @tail = @head
     else
       @head = Node.new(value, @head)
@@ -29,9 +29,11 @@ class LinkedList
   end
 
   def size
-    size = 0
+    return 0 if @head.nil?
+
+    size = 1
     current_node = @head
-    until current_node.next_node.nil?
+    until current_node == @tail
       size += 1
       current_node = current_node.next_node
     end
@@ -44,18 +46,22 @@ class LinkedList
     until cur_index == index
       cur_index += 1
       current_node = current_node.next_node
+      return Node.new(-1, nil) if current_node.nil?
     end
     current_node
   end
 
   def pop
     popped = @tail
-    current_node = current.next_node until current_node.next_node == @tail
-    @tail = current_node.next_node(nil)
+    current_node = @head
+    current_node = current_node.next_node until current_node.next_node == @tail
+    current_node.next_node = nil
+    @tail = current_node
     popped
   end
 
   def contains?(value)
+    current_node = @head
     until current_node.value == value
       return false if current_node.next_node.nil?
 
@@ -66,6 +72,7 @@ class LinkedList
 
   def find(value)
     index = 0
+    current_node = @head
     until current_node.value == value
       return nil if current_node.next_node.nil?
 
@@ -80,10 +87,53 @@ class LinkedList
     # while next value != nil
     current_node = @head
     output = @head.value.to_s
-    until current_node.value.nil?
-      current_node = current.next_node
-      output << current_node.next_node.value.to_s
+    until current_node == @tail
+      current_node = current_node.next_node
+      output << " -> #{current_node.value}"
     end
     output
   end
 end
+
+# demo code
+list = LinkedList.new
+# try the append method
+(1..10).each do |i|
+  list.append(i)
+end
+puts '0. should print 1 for head, 10 for tail'
+puts "head = #{list.head.value}, tail = #{list.tail.value}"
+# try the to_s method
+puts '1. print the list, should print 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10'
+puts list.to_s
+
+puts '2. try the size method, should print 10'
+puts list.size
+
+# try the pop method, last element is removed
+list.pop
+puts '3. last is popped, should print 9 as the tail value'
+p list.tail.value
+
+# try the prepend method, add to first element
+puts '4. 0 is added to first, should print 0 as head value'
+list.prepend(0)
+p list.head.value
+
+# try the at(index) method
+puts '5i. should print 1 for index 1'
+puts list.at(1).value
+puts '5ii. should print -1 for index 11, not exist'
+p list.at(11).value
+
+# try the contains?(value) method
+puts '6i. should print true for 1 exist'
+puts list.contains?(1)
+puts '6ii. should print false for 20 not exist'
+puts list.contains?(20)
+
+# try the find method
+puts '7i. should print index 7 for value 7 node'
+puts list.find(7)
+puts '7ii. should print nil for 11 node that doesnt exist'
+p list.find(11)
