@@ -139,6 +139,7 @@ puts "head = #{list.head.value}, tail = #{list.tail.value}"
 puts '1. print the list, should print 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10'
 puts list.to_s
 
+# try the size method
 puts '2. try the size method, should print 10'
 puts list.size
 
