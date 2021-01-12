@@ -52,6 +52,7 @@ class LinkedList
   end
 
   def pop
+    return nil if @head.nil?
     popped = @tail
     current_node = @head
     current_node = current_node.next_node until current_node.next_node == @tail
@@ -85,6 +86,7 @@ class LinkedList
   def to_s
     # head > next value > tail > nil
     # while next value != nil
+    return 'The list is empty' if @head.nil?
     current_node = @head
     output = @head.value.to_s
     until current_node == @tail
